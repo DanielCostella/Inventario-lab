@@ -1,7 +1,7 @@
 import axios from 'axios';
 
 const api = axios.create({
-  baseURL: 'http://localhost:3000', // Asegúrate de que este es el puerto en el que corre tu backend
+  baseURL: 'https://inventario-lab-backend.onrender.com', // URL de tu backend
 });
 
 export default api;
