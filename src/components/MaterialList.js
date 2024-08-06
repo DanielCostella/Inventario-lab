@@ -14,13 +14,25 @@ const MaterialList = () => {
       });
   }, []);
 
+  const handleDelete = async (id) => {
+    try {
+      await api.delete(`/materials/${id}`);
+      setMaterials(materials.filter(material => material.id !== id));
+    } catch (error) {
+      console.error('Error deleting material:', error);
+    }
+  };
+
   return (
     <div className="container mt-5">
       <h1 className="text-center">Materials</h1>
       <ul className="list-group">
         {materials.map(material => (
-          <li key={material.id} className="list-group-item">
-            <strong>{material.nombre}</strong>: {material.descripcion} (Stock: {material.stock})
+          <li key={material.id} className="list-group-item d-flex justify-content-between align-items-center">
+            <div>
+              <strong>{material.nombre}</strong>: {material.descripcion} (Stock: {material.stock})
+            </div>
+            <button className="btn btn-danger" onClick={() => handleDelete(material.id)}>Eliminar</button>
           </li>
         ))}
       </ul>

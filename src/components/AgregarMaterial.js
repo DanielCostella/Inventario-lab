@@ -1,20 +1,28 @@
-// src/components/AddMaterial.js
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import api from '../api';
 
 const AddMaterial = () => {
-  const [nombre, setNombre] = useState('');
-  const [descripcion, setDescripcion] = useState('');
+  const [materials, setMaterials] = useState([]);
+  const [selectedMaterial, setSelectedMaterial] = useState('');
   const [stock, setStock] = useState(0);
   const [id, setId] = useState('');
   const [fecha, setFecha] = useState('');
+
+  useEffect(() => {
+    api.get('/materials')
+      .then(response => {
+        setMaterials(response.data);
+      })
+      .catch(error => {
+        console.error('Error fetching materials:', error);
+      });
+  }, []);
 
   const handleSubmit = (e) => {
     e.preventDefault();
 
     const newMaterial = {
-      nombre,
-      descripcion,
+      nombre: selectedMaterial,
       stock,
       id,
       fecha,
@@ -23,8 +31,7 @@ const AddMaterial = () => {
     api.post('/materials', newMaterial)
       .then(response => {
         alert('Material agregado exitosamente');
-        setNombre('');
-        setDescripcion('');
+        setSelectedMaterial('');
         setStock(0);
         setId('');
         setFecha('');
@@ -41,23 +48,19 @@ const AddMaterial = () => {
       <form onSubmit={handleSubmit}>
         <div className="mb-3">
           <label className="form-label">Nombre</label>
-          <input 
-            type="text" 
+          <select 
             className="form-control" 
-            value={nombre} 
-            onChange={(e) => setNombre(e.target.value)} 
-            required 
-          />
-        </div>
-        <div className="mb-3">
-          <label className="form-label">Descripción</label>
-          <input 
-            type="text" 
-            className="form-control" 
-            value={descripcion} 
-            onChange={(e) => setDescripcion(e.target.value)} 
-            required 
-          />
+            value={selectedMaterial} 
+            onChange={(e) => setSelectedMaterial(e.target.value)} 
+            required
+          >
+            <option value="">Seleccione un material</option>
+            {materials.map(material => (
+              <option key={material.nombre} value={material.nombre}>
+                {material.nombre}
+              </option>
+            ))}
+          </select>
         </div>
         <div className="mb-3">
           <label className="form-label">Stock</label>
@@ -95,4 +98,4 @@ const AddMaterial = () => {
   );
 };
 
-export default AddMaterial;
+export default AgregarMaterial;
