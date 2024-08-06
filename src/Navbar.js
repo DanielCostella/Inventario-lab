@@ -15,13 +15,16 @@ const Navbar = () => {
               <Link className="nav-link" to="/add">Agregar Material</Link>
             </li>
             <li className="nav-item">
-              <Link className="nav-link" to="/materials">Ver Materiales</Link>
+              <Link className="nav-link" to="/">Ver Materiales</Link>
             </li>
             <li className="nav-item">
-              <Link className="nav-link" to="/update">Actualizar Material</Link>
+              <Link className="nav-link" to="/search">Buscar Material</Link>
             </li>
             <li className="nav-item">
-              <Link className="nav-link" to="/delete">Eliminar Material</Link>
+              <Link className="nav-link" to="/users">Ver Usuarios</Link>
+            </li>
+            <li className="nav-item">
+              <Link className="nav-link" to="/add-user">Agregar Usuario</Link>
             </li>
           </ul>
         </div>
