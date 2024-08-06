@@ -1,37 +1,54 @@
-// backend/routes/materials.js
 const express = require('express');
 const router = express.Router();
 const Material = require('../models/Material');
 
-router.post('/materials', async (req, res) => {
+// Obtener todos los materiales
+router.get('/', async (req, res) => {
   try {
-    const { nombre, descripcion, stock, id, fecha } = req.body;
-    const newMaterial = new Material({
-      nombre,
-      descripcion,
-      stock,
-      userId: id,
-      fecha,
-    });
-    await newMaterial.save();
-    res.status(201).send(newMaterial);
+    const materials = await Material.findAll();
+    res.json(materials);
   } catch (error) {
-    res.status(400).send({ error: 'Error al agregar material' });
+    res.status(500).json({ error: 'Error al obtener los materiales' });
   }
+});
 
-  // Eliminar un material por ID
-router.delete('/:id', async (req, res) => {
-    try {
-      const material = await Material.findByIdAndDelete(req.params.id);
-      if (!material) {
-        return res.status(404).send('Material no encontrado');
+// Agregar o actualizar el stock de un material
+router.post('/', async (req, res) => {
+  const { nombre, stock, id, fecha } = req.body;
+  
+  try {
+    const material = await Material.findOne({ where: { nombre } });
+    
+    if (material) {
+      material.stock += stock; // Puede ser positivo o negativo
+      if (material.stock < 0) {
+        return res.status(400).json({ error: 'El stock no puede ser negativo' });
       }
-      res.send('Material eliminado correctamente');
-    } catch (error) {
-      res.status(500).send(error);
+      await material.save();
+      res.json({ message: 'Stock actualizado', material });
+    } else {
+      res.status(400).json({ error: 'El material no existe en la base de datos' });
     }
-  });
+  } catch (error) {
+    res.status(500).json({ error: 'Error al agregar o actualizar el material' });
+  }
+});
 
+// Eliminar un material por nombre
+router.delete('/:nombre', async (req, res) => {
+  const { nombre } = req.params;
+
+  try {
+    const material = await Material.findOne({ where: { nombre } });
+    if (material) {
+      await material.destroy();
+      res.json({ message: 'Material eliminado' });
+    } else {
+      res.status(404).json({ error: 'Material no encontrado' });
+    }
+  } catch (error) {
+    res.status(500).json({ error: 'Error al eliminar el material' });
+  }
 });
 
 module.exports = router;
