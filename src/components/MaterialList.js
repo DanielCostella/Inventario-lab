@@ -25,7 +25,7 @@ const MaterialList = () => {
 
   return (
     <div className="container mt-5">
-      <h1 className="text-center">Materials</h1>
+      <h1 className="text-center" style={{ fontSize: '2.5rem', color: 'blue' }}>Bienvenido a Inventario</h1>
       <ul className="list-group">
         {materials.map(material => (
           <li key={material.id} className="list-group-item d-flex justify-content-between align-items-center">
