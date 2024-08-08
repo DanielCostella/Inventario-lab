@@ -3,7 +3,7 @@ const router = express.Router();
 const Material = require('../models/Material');
 
 // Obtener todos los materiales
-router.get('/', async (req, res) => {
+router.get('/api/materials', async (req, res) => {
   try {
     const materials = await Material.findAll();
     res.json(materials);
