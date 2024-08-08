@@ -3,13 +3,14 @@
     "version": "1.0.0",
     "main": "index.js",
     "scripts": {
-      "start": "node index.js",
-      "init": "node scripts/initMaterials.js"
+        "start": "node index.js",
+        "init": "node scripts/initMaterials.js"
     },
     "dependencies": {
-      "dotenv": "^8.2.0",
-      "express": "^4.17.1",
-      "sequelize": "^6.3.5",
-      "mysql2": "^2.2.5"
+        "bcrypt": "^5.1.1",
+        "dotenv": "^8.2.0",
+        "express": "^4.17.1",
+        "mysql2": "^2.2.5",
+        "sequelize": "^6.3.5"
     }
-  }
+}
