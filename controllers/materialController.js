@@ -10,8 +10,9 @@ exports.getAllMaterials = async (req, res) => {
 };
 
 exports.getMaterialById = async (req, res) => {
+  const { id } = req.params;
   try {
-    const material = await Material.findByPk(req.params.id);
+    const material = await Material.findByPk(id);
     if (material) {
       res.json(material);
     } else {
@@ -23,19 +24,25 @@ exports.getMaterialById = async (req, res) => {
 };
 
 exports.createMaterial = async (req, res) => {
+  const { nombre, descripcion, stock } = req.body;
   try {
-    const newMaterial = await Material.create(req.body);
-    res.status(201).json(newMaterial);
+    const material = await Material.create({ nombre, descripcion, stock });
+    res.status(201).json(material);
   } catch (error) {
     res.status(500).json({ error: 'Error al crear el material' });
   }
 };
 
 exports.updateMaterial = async (req, res) => {
+  const { id } = req.params;
+  const { nombre, descripcion, stock } = req.body;
   try {
-    const material = await Material.findByPk(req.params.id);
+    const material = await Material.findByPk(id);
     if (material) {
-      await material.update(req.body);
+      material.nombre = nombre;
+      material.descripcion = descripcion;
+      material.stock = stock;
+      await material.save();
       res.json(material);
     } else {
       res.status(404).json({ error: 'Material no encontrado' });
@@ -46,8 +53,9 @@ exports.updateMaterial = async (req, res) => {
 };
 
 exports.deleteMaterial = async (req, res) => {
+  const { id } = req.params;
   try {
-    const material = await Material.findByPk(req.params.id);
+    const material = await Material.findByPk(id);
     if (material) {
       await material.destroy();
       res.json({ message: 'Material eliminado' });

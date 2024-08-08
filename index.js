@@ -5,6 +5,7 @@ const sequelize = require('./config/config');
 const materialRoutes = require('./routes/materialRoutes');
 const movementRoutes = require('./routes/movementRoutes');
 const userRoutes = require('./routes/userRoutes');
+const authRoutes = require('./routes/AuthController'); // Si tienes autenticación
 
 const app = express();
 const port = process.env.PORT || 3000;
@@ -19,6 +20,7 @@ app.get('/', (req, res) => {
 app.use('/api/materials', materialRoutes);
 app.use('/api/movements', movementRoutes);
 app.use('/api/users', userRoutes);
+app.use('/api/auth', authRoutes); // Si tienes autenticación
 
 sequelize.sync().then(() => {
   console.log('Base de datos sincronizada');
