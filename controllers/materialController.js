@@ -3,7 +3,7 @@ const Material = require('../models/Material');
 exports.getAllMaterials = async (req, res) => {
   try {
     const materials = await Material.findAll();
-    res.json(materials);
+    res.status(200).json(materials);
   } catch (error) {
     res.status(500).json({ error: 'Error al obtener los materiales' });
   }
@@ -14,7 +14,7 @@ exports.getMaterialById = async (req, res) => {
   try {
     const material = await Material.findByPk(id);
     if (material) {
-      res.json(material);
+      res.status(200).json(material);
     } else {
       res.status(404).json({ error: 'Material no encontrado' });
     }
@@ -43,7 +43,7 @@ exports.updateMaterial = async (req, res) => {
       material.descripcion = descripcion;
       material.stock = stock;
       await material.save();
-      res.json(material);
+      res.status(200).json(material);
     } else {
       res.status(404).json({ error: 'Material no encontrado' });
     }
@@ -58,7 +58,7 @@ exports.deleteMaterial = async (req, res) => {
     const material = await Material.findByPk(id);
     if (material) {
       await material.destroy();
-      res.json({ message: 'Material eliminado' });
+      res.status(200).json({ message: 'Material eliminado' });
     } else {
       res.status(404).json({ error: 'Material no encontrado' });
     }

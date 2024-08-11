@@ -1,12 +1,7 @@
 const { DataTypes } = require('sequelize');
-const sequelize = require('../config/config');
+const sequelize = require('../config/config'); // Importa la instancia de Sequelize
 
 const Material = sequelize.define('Material', {
-  id: {
-    type: DataTypes.INTEGER,
-    autoIncrement: true,
-    primaryKey: true,
-  },
   nombre: {
     type: DataTypes.STRING,
     allowNull: false,
@@ -17,9 +12,9 @@ const Material = sequelize.define('Material', {
   stock: {
     type: DataTypes.INTEGER,
     defaultValue: 0,
-  }
+  },
 }, {
-  timestamps: true,
+  timestamps: true, // Asegura que createdAt y updatedAt se manejen automáticamente
 });
 
 module.exports = Material;
