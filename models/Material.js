@@ -13,6 +13,11 @@ const Material = sequelize.define('Material', {
     type: DataTypes.INTEGER,
     defaultValue: 0,
   },
+  lastUpdated: {
+    type: DataTypes.DATE,
+    allowNull: false,
+    defaultValue: DataTypes.NOW,
+  }
 }, {
   timestamps: true, // Asegura que createdAt y updatedAt se manejen automáticamente
 });
