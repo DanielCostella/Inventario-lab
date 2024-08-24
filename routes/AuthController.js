@@ -7,11 +7,22 @@ const User = require('../models/User');
 // Registro
 router.post('/register', async (req, res) => {
   const { username, password } = req.body;
-  const hashedPassword = await bcrypt.hash(password, 10);
+
   try {
+    // Verificar si el usuario ya existe
+    const existingUser = await User.findOne({ where: { username } });
+    if (existingUser) {
+      return res.status(400).json({ error: 'El usuario ya existe' });
+    }
+
+    // Encriptar la contraseña antes de guardar
+    const hashedPassword = await bcrypt.hash(password, 10);
+
+    // Crear nuevo usuario
     const newUser = await User.create({ username, password: hashedPassword });
     res.status(201).json(newUser);
   } catch (error) {
+    console.error('Error al registrar usuario:', error);
     res.status(500).json({ error: 'Error al registrar usuario' });
   }
 });

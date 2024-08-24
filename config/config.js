@@ -1,16 +1,14 @@
 const { Sequelize } = require('sequelize');
 require('dotenv').config();  // Cargar variables de entorno desde .env
 
-// Conectar usando la DATABASE_URL desde las variables de entorno
+const isProduction = process.env.NODE_ENV === 'production';
+
 const sequelize = new Sequelize(process.env.DATABASE_URL, {
   dialect: 'postgres',
   logging: false,
-  dialectOptions: {
-    ssl: {
-      require: true,
-      rejectUnauthorized: false // Necesario si Render requiere conexiones SSL
-    }
-  }
+  dialectOptions: isProduction
+    ? { ssl: { require: true, rejectUnauthorized: false } } // Para producción
+    : {} // Sin SSL para desarrollo
 });
 
 sequelize.authenticate()
@@ -21,4 +19,4 @@ sequelize.authenticate()
     console.error('No se pudo conectar a la base de datos:', err);
   });
 
-module.exports = sequelize;
+  module.exports = sequelize;

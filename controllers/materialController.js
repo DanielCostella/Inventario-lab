@@ -1,13 +1,14 @@
 const Material = require('../models/Material');
 
-exports.getAllMaterials = async (req, res) => {
-  try {
-    const materials = await Material.findAll();
-    res.status(200).json(materials);
-  } catch (error) {
-    res.status(500).json({ error: 'Error al obtener los materiales' });
-  }
-};
+    exports.getAllMaterials = async (req, res) => {
+      try {
+        const materials = await Material.findAll(); 
+        res.json(materials);
+      } catch (error) {
+        console.error('Error al obtener los materiales:', error);
+        res.status(500).json({ error: 'Error al obtener los materiales' });
+      }
+    };
 
 exports.getMaterialById = async (req, res) => {
   const { id } = req.params;
@@ -66,3 +67,5 @@ exports.deleteMaterial = async (req, res) => {
     res.status(500).json({ error: 'Error al eliminar el material' });
   }
 };
+
+

@@ -1,25 +1,28 @@
 const { DataTypes } = require('sequelize');
-const sequelize = require('../config/config'); // Importa la instancia de Sequelize
+const sequelize = require('../config/config');
 
 const Material = sequelize.define('Material', {
-  nombre: {
+  nombre: { 
     type: DataTypes.STRING,
     allowNull: false,
   },
-  descripcion: {
+  descripcion: { // Cambia 'description' a 'descripcion'
     type: DataTypes.STRING,
   },
   stock: {
     type: DataTypes.INTEGER,
-    defaultValue: 0,
+    allowNull: false,
   },
-  lastUpdated: {
+  createdAt: { // Coincide con la columna de la base de datos
     type: DataTypes.DATE,
     allowNull: false,
-    defaultValue: DataTypes.NOW,
+  },
+  updatedAt: { // Coincide con la columna de la base de datos
+    type: DataTypes.DATE,
+    allowNull: false,
   }
 }, {
-  timestamps: true, // Asegura que createdAt y updatedAt se manejen automáticamente
+  timestamps: true, // Esto asegura que Sequelize use las columnas 'createdAt' y 'updatedAt' automáticamente
 });
 
 module.exports = Material;

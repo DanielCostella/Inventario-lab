@@ -1,9 +1,11 @@
 import React, { useState } from 'react';
 import api from '../api';
+import { useNavigate } from 'react-router-dom';  // Importa useNavigate para redirección
 
 const Login = () => {
   const [username, setUsername] = useState('');
   const [password, setPassword] = useState('');
+  const navigate = useNavigate();  // Inicializa useNavigate
 
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -13,6 +15,7 @@ const Login = () => {
       alert('Inicio de sesión exitoso');
       setUsername('');
       setPassword('');
+      navigate('/dashboard');  // Redirige al Dashboard después del login exitoso
     } catch (error) {
       alert('Error al iniciar sesión');
       console.error(error);
