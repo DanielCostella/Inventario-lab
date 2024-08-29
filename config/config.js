@@ -1,22 +1,45 @@
 const { Sequelize } = require('sequelize');
-require('dotenv').config();  // Cargar variables de entorno desde .env
+require('dotenv').config();
 
-const isProduction = process.env.NODE_ENV === 'production';
+const env = process.env.NODE_ENV || 'development';
 
-const sequelize = new Sequelize(process.env.DATABASE_URL, {
-  dialect: 'postgres',
-  logging: false,
-  dialectOptions: isProduction
-    ? { ssl: { require: true, rejectUnauthorized: false } } // Para producción
-    : {} // Sin SSL para desarrollo
-});
+const config = {
+  development: {
+    username: "postgres",
+    password: "Depocapo25",
+    database: "lab_inventory",
+    host: "127.0.0.1",
+    dialect: "postgres"
+  },
+  test: {
+    url: process.env.DATABASE_URL,
+    dialect: 'postgres',
+    dialectOptions: {
+      ssl: process.env.NODE_ENV === 'production' ? { require: true, rejectUnauthorized: false } : false,
+    },
+  },
+  production: {
+    url: process.env.DATABASE_URL,
+    dialect: 'postgres',
+    dialectOptions: {
+      ssl: { require: true, rejectUnauthorized: false },
+    },
+  },
+};
 
-sequelize.authenticate()
-  .then(() => {
-    console.log('Conexión a PostgreSQL establecida correctamente.');
-  })
-  .catch(err => {
-    console.error('No se pudo conectar a la base de datos:', err);
-  });
+let sequelize;
+if (env === 'production' || env === 'test') {
+  sequelize = new Sequelize(config[env].url, config[env]);
+} else {
+  sequelize = new Sequelize(
+    config.development.database,
+    config.development.username,
+    config.development.password,
+    {
+      host: config.development.host,
+      dialect: config.development.dialect
+    }
+  );
+}
 
-  module.exports = sequelize;
+module.exports = sequelize;

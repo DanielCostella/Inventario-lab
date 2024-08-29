@@ -20,7 +20,7 @@ router.post('/register', async (req, res) => {
 
     // Crear nuevo usuario
     const newUser = await User.create({ username, password: hashedPassword });
-    res.status(201).json(newUser);
+    res.status(201).json({ id: newUser.id, username: newUser.username });
   } catch (error) {
     console.error('Error al registrar usuario:', error);
     res.status(500).json({ error: 'Error al registrar usuario' });
@@ -39,9 +39,20 @@ router.post('/login', async (req, res) => {
     if (!isValidPassword) {
       return res.status(400).json({ error: 'Contraseña incorrecta' });
     }
-    const token = jwt.sign({ id: user.id }, process.env.JWT_SECRET, { expiresIn: '1h' });
-    res.json({ token });
+    const token = jwt.sign(
+      { id: user.id, email: user.username },
+      process.env.JWT_SECRET,
+      { expiresIn: '1h' }
+    );
+    res.json({
+      token,
+      user: {
+        id: user.id,
+        email: user.username
+      }
+    });
   } catch (error) {
+    console.error('Error al iniciar sesión:', error);
     res.status(500).json({ error: 'Error al iniciar sesión' });
   }
 });

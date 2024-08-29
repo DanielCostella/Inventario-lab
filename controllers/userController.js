@@ -34,3 +34,17 @@ exports.deleteUser = async (req, res) => {
     res.status(500).json({ error: error.message });
   }
 };
+
+// Obtener el usuario actual
+exports.getCurrentUser = async (req, res) => {
+  try {
+    if (req.user) {
+      res.json(req.user);
+    } else {
+      res.status(401).json({ error: 'Usuario no autenticado' });
+    }
+  } catch (error) {
+    console.error('Error al obtener el usuario actual:', error);
+    res.status(500).json({ error: 'Error al obtener el usuario actual' });
+  }
+};

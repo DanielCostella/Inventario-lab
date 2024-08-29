@@ -16,7 +16,8 @@
         "jsonwebtoken": "^9.0.2",
         "pg": "^8.12.0",
         "pg-hstore": "^2.3.4",
-        "sequelize": "^6.3.5"
+        "sequelize": "^6.37.3",
+        "sequelize-cli": "^6.6.2"
     },
     "devDependencies": {
         "@babel/plugin-proposal-private-property-in-object": "^7.18.6"

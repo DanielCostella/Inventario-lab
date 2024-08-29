@@ -1,33 +1,31 @@
 const express = require('express');
 const router = express.Router();
 const materialController = require('../controllers/materialController');
-const Material = require('../models/Material');
+const authenticateToken = require('../middleware/authenticateToken');
 
 // Definir las rutas para materiales
-router.get('/', materialController.getAllMaterials);
-router.get('/:id', materialController.getMaterialById);
-router.post('/', materialController.createMaterial);
-router.put('/:id', materialController.updateMaterial);
-router.delete('/:id', materialController.deleteMaterial);
+router.get('/', authenticateToken, materialController.getAllMaterials);
+router.get('/:id', authenticateToken, materialController.getMaterialById);
+router.post('/', authenticateToken, materialController.createMaterial);
+router.put('/:id', authenticateToken, materialController.updateMaterial);
+router.delete('/:id', authenticateToken, materialController.deleteMaterial);
 
 // Ruta para actualizar el stock de un material
-router.post('/update', async (req, res) => {
+router.put('/:id/update-stock', authenticateToken, async (req, res) => {
   try {
-    const { materialId, quantity } = req.body;
-    const material = await Material.findByPk(materialId);
+    const { id } = req.params;
+    const { quantity } = req.body;
+    const userEmail = req.user.email; // Asumiendo que el middleware de autenticación proporciona esta información
 
-    if (!material) {
-      return res.status(404).json({ error: 'Material no encontrado' });
+    const material = await materialController.updateMaterial(req, res);
+
+    if (material) {
+      console.log('Material actualizado:', material);
+      res.json({ success: true, material });
     }
-
-    material.stock += quantity;
-    material.lastUpdated = new Date(); // Actualiza la fecha de última modificación
-    await material.save();
-
-    res.json({ success: true, material });
   } catch (error) {
-    console.error('Error al actualizar el material:', error);
-    res.status(500).json({ error: 'Ocurrió un error al actualizar el material' });
+    console.error('Error al actualizar el stock del material:', error);
+    res.status(500).json({ error: 'Ocurrió un error al actualizar el stock del material' });
   }
 });
 

@@ -2,7 +2,8 @@ const Movement = require('../models/Movement');
 const MaterialMovement = require('../models/MaterialMovement');
 const Material = require('../models/Material');
 
-exports.createMovement = async (req, res) => {
+// Crear un nuevo movimiento
+const createMovement = async (req, res) => {
   const { materialId, type, quantity } = req.body;
 
   try {
@@ -27,17 +28,26 @@ exports.createMovement = async (req, res) => {
 
     res.status(201).json({ message: 'Movimiento registrado con éxito' });
   } catch (error) {
-    res.status(500).json({ error: error.message });
+    console.error('Error al crear movimiento:', error);
+    res.status(500).json({ error: 'Error al crear movimiento' });
   }
 };
 
-exports.getMovements = async (req, res) => {
+// Obtener todos los movimientos
+const getMovements = async (req, res) => {
   try {
     const movements = await MaterialMovement.findAll({
       include: [Material, Movement]
     });
     res.json(movements);
   } catch (error) {
-    res.status(500).json({ error: error.message });
+    console.error('Error al obtener movimientos:', error);
+    res.status(500).json({ error: 'Error al obtener movimientos' });
   }
+};
+
+// Asegúrate de exportar todas las funciones necesarias
+module.exports = {
+  createMovement,
+  getMovements
 };

@@ -1,28 +1,38 @@
-const { DataTypes } = require('sequelize');
-const sequelize = require('../config/config');
+const { Sequelize, DataTypes } = require('sequelize');
+const sequelize = new Sequelize(process.env.DATABASE_URL, {
+  dialect: 'postgres',
+  dialectOptions: {
+    ssl: process.env.NODE_ENV === 'production' ? { require: true, rejectUnauthorized: false } : false,
+  },
+});
 
 const Material = sequelize.define('Material', {
-  nombre: { 
+  nombre: {
     type: DataTypes.STRING,
     allowNull: false,
   },
-  descripcion: { // Cambia 'description' a 'descripcion'
+  descripcion: {
     type: DataTypes.STRING,
   },
   stock: {
     type: DataTypes.INTEGER,
     allowNull: false,
+    defaultValue: 0,
   },
-  createdAt: { // Coincide con la columna de la base de datos
+  updatedBy: {
+    type: DataTypes.STRING,
+    allowNull: true,
+  },
+  createdAt: {
     type: DataTypes.DATE,
     allowNull: false,
+    defaultValue: DataTypes.NOW,
   },
-  updatedAt: { // Coincide con la columna de la base de datos
+  updatedAt: {
     type: DataTypes.DATE,
     allowNull: false,
-  }
-}, {
-  timestamps: true, // Esto asegura que Sequelize use las columnas 'createdAt' y 'updatedAt' automáticamente
+    defaultValue: DataTypes.NOW,
+  },
 });
 
 module.exports = Material;
